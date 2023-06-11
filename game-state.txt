@@ -1,0 +1,9 @@
+
+{:board {:state [:e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 1, :difficulty 3, :difficulty2 3}
+
+
+
+
+
+
+

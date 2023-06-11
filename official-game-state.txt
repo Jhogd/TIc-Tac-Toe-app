@@ -1,0 +1,30 @@
+{:board {:state [:e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 1, :difficulty 3, :difficulty2 3}{:board {:state [:e :e :e :e :e :e :e :e :e], :size 3, :dimension :two}, :player :x, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :e :e :e :e :e :e :e], :size 3, :dimension :two}, :player :o, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :o :e :e :e :e :e :e], :size 3, :dimension :two}, :player :x, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :o :x :e :e :e :e :e], :size 3, :dimension :two}, :player :o, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :o :x :e :e :o :e :e], :size 3, :dimension :two}, :player :x, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :o :x :x :e :o :e :e], :size 3, :dimension :two}, :player :o, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :o :x :x :e :o :e :o], :size 3, :dimension :two}, :player :x, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :o :x :x :x :o :e :o], :size 3, :dimension :two}, :player :o, :game-number 2, :difficulty 3, :difficulty2 3}
+{:board {:state [:e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 3, :difficulty 1, :difficulty2 nil}
+{:board {:state [:x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :o, :game-number 3, :difficulty 1, :difficulty2 nil}
+{:board {:state [:x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :o :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 3, :difficulty 1, :difficulty2 nil}
+{:board {:state [:x :e :e :e :e :e :e :e :e :x :e :e :e :e :e :e :e :e :e :e :o :e :e :e :e :e :e], :size 3, :dimension :three}, :player :o, :game-number 3, :difficulty 1, :difficulty2 nil}
+{:board {:state [:x :e :e :e :e :o :e :e :e :x :e :e :e :e :e :e :e :e :e :e :o :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 3, :difficulty 1, :difficulty2 nil}
+{:board {:state [:x :e :e :e :e :o :e :e :e :x :e :e :e :e :e :e :e :e :x :e :o :e :e :e :e :e :e], :size 3, :dimension :three}, :player :o, :game-number 3, :difficulty 1, :difficulty2 nil}
+{:board {:state [:e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 4, :dimension :two}, :player :x, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 4, :dimension :two}, :player :o, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:x :e :e :e :o :e :e :e :e :e :e :e :e :e :e :e], :size 4, :dimension :two}, :player :x, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:x :e :e :e :o :e :e :x :e :e :e :e :e :e :e :e], :size 4, :dimension :two}, :player :o, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:x :e :e :e :o :e :e :x :o :e :e :e :e :e :e :e], :size 4, :dimension :two}, :player :x, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:x :e :x :e :o :e :e :x :o :e :e :e :e :e :e :e], :size 4, :dimension :two}, :player :o, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:x :e :x :e :o :e :e :x :o :e :e :e :e :e :e :e], :size 4, :dimension :two}, :player :o, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:x :e :x :e :o :e :e :x :o :e :e :e :o :e :e :e], :size 4, :dimension :two}, :player :x, :game-number 4, :difficulty nil, :difficulty2 nil}
+{:board {:state [:e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 5, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :o, :game-number 5, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :o :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 5, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :o :x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :o, :game-number 5, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :o :x :o :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 5, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :o :x :o :x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :o, :game-number 5, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :o :x :o :x :o :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :x, :game-number 5, :difficulty 3, :difficulty2 3}
+{:board {:state [:x :o :x :o :x :o :x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e], :size 3, :dimension :three}, :player :o, :game-number 5, :difficulty 3, :difficulty2 3}

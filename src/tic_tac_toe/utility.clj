@@ -1,0 +1,103 @@
+(ns tic-tac-toe.utility
+(:require [clojure.string :as str]))
+
+
+(def X :x)
+(def O :o)
+(def EMPTY :e)
+
+(def game-state {:board nil :player nil :game-number 0 :difficulty nil :difficulty2 nil})
+
+(defn ->game-state [board current-player game-number level level-two]
+   (assoc game-state :board board :player current-player :game-number game-number :difficulty level :difficulty2 level-two))
+
+(defprotocol Board
+  (init-board [this])
+
+  )
+
+(defrecord Four-by-four []
+  Board
+  (init-board [this] {:state (vec (repeat (* 4 4) EMPTY)) :size 4 :dimension :two})
+
+  )
+
+(defrecord Three-by-three []
+  Board
+  (init-board [this] {:state (vec (repeat (* 3 3) EMPTY)) :size 3 :dimension :two})
+  )
+
+(defrecord Three-dimension []
+  Board
+  (init-board [this] {:state (vec (repeat (* 3 3 3) EMPTY)) :size 3 :dimension :three})
+  )
+
+
+(defn has-empty-space? [board]
+  (boolean (some #(= EMPTY %) board)))
+
+(defn is-empty? [board position]
+  (= (nth board position) EMPTY))
+
+(defn player-move [board player position]
+  (update board :state  #(assoc % position player)))
+
+(defn switch-player [current-player]
+  (if (= current-player X) O X))
+
+(defmulti win? :dimension)
+
+(defmethod win? :two [board player]
+  (let [size (:size board)
+        rows (partition size (:state board))
+        cols (apply mapv vector rows)
+        diag1 (for [i (range size)] (nth (nth rows i) i))
+        diag2 (for [i (range size)] (nth (nth rows i) (- size (inc i))))
+        all-spaces (concat rows cols [diag1 diag2])
+        win-cond (fn [space] (every? #(= player %) space))]
+    (boolean (some win-cond all-spaces))))
+
+(defmethod win? :three [board player]
+  (let [size (:size board)
+        rows (partition size (:state board))
+        cols (for [i [[0 3 6] [1 4 7] [2 5 8] [9 12 15] [10 13 16] [11 14 17]
+                      [18 21 24] [19 22 25] [20 23 26]]]
+               (mapv #(get (:state board) %) i))
+        diags (for [i [[0 4 8] [2 4 6] [9 13 17] [12 13 15] [18 22 26] [20 22 24]]]
+                (mapv #(get (:state board) %) i))
+        depth-cols (apply mapv vector (partition 9 (:state board)))
+        depth-rows (for [i [[0 10 20] [3 13 23] [6 16 26]]] (mapv #(get (:state board) %) i))
+        depth-diags (for [i [[0 13 26] [2 13 24]]] (mapv #(get (:state board) %) i))
+        all-spaces (concat rows cols diags depth-cols depth-rows depth-diags)
+        win-cond (fn [space] (every? #(= player %) space))]
+    (boolean (some win-cond all-spaces))))
+
+
+
+(defn list-empties [board]
+  (vec (keep-indexed (fn [index value]
+                       (when (= value EMPTY) index)) board)))
+
+(defn terminal-state [board]
+  (cond
+    (win? board X) 10
+    (win? board O) -10
+    :else
+    0))
+
+(defn terminal? [board]
+  (or (win? board X) (win? board O) (not (has-empty-space? (:state board)))))
+
+
+(defmulti print-board :dimension)
+
+(defmethod print-board :two [board]
+    (doseq [row (partition (:size board) (:state board))]
+      (println (str/join " | " row))))
+
+(defmethod print-board :three [board]
+  (doseq [layer (partition 9 (:state board))]
+    (doseq [row (partition (:size board) layer)]
+      (println (str/join " | " row)))
+      (println (str/join "---" (repeat (:size board) "+")))
+    (println)))
