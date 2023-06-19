@@ -11,6 +11,7 @@
   (insert-board board player number)
   (save-board board player number diff1 diff2 edn-file))
 
+
 (defn setup [starting-game-state]
   {:frame-rate     (q/frame-rate 60)
    :color-mode     (q/color-mode :rgb)
@@ -45,10 +46,7 @@
         y (quot (mod y-cord shift) square)]
     (+ x (* (:size board) y) (* (:size board) (:size board) layer))))
 
-(defn switching-player [board current-player player]
-  (if (human-turn? board current-player player)
-    current-player
-    (switch-player current-player)))
+
 
 (defmulti play-game (fn [x & args] (:display x)))
 

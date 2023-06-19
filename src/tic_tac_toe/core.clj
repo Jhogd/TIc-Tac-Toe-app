@@ -85,7 +85,7 @@
         difficulty (ask-difficulty)]
     (insert-game game-number difficulty 0)
     (save-current-board board X game-number difficulty 0)
-    (conj (conj board {:game-type :ai-vs-human :age :new}) display)))
+    (conj (conj (conj board {:game-type :ai-vs-human :age :new}) display) per-choice)))
 
 
 (defn run-human-vs-human [per-choice display]
@@ -93,7 +93,7 @@
         game-number (inc (get-game-number per-choice))]
     (insert-game game-number 0 0)
     (save-current-board board X game-number 0 0)
-    (conj (conj board {:game-type :human-vs-human :age :new}) display)))
+    (conj (conj (conj board {:game-type :human-vs-human :age :new}) display) per-choice)))
 
 (defn run-ai-vs-ai [per-choice display]
   (let [board (get-board)
@@ -102,7 +102,7 @@
         difficulty2 (ask-difficulty)]
     (insert-game game-number difficulty difficulty2)
     (save-current-board board X game-number difficulty difficulty2)
-    (conj (conj board {:game-type :ai-vs-ai :age :new}) display)))
+    (conj (conj (conj board {:game-type :ai-vs-ai :age :new}) display) per-choice)))
 
 (defn game-mode [per-choice display]
   (println "Please select a game mode:\n 1) ai-vs-human\n 2) human-vs-human\n 3) ai-vs-ai")
@@ -124,7 +124,7 @@
       (println "Would you like to continue the last game or start a new one? \n 1) Resume \n 2) New Game")
       (let [choice (read)]
         (cond
-          (= choice 1) (assoc (assoc (:board last-state) :age :old) :display (get display :display))
+          (= choice 1) (conj (assoc (assoc (:board last-state) :age :old) :display (get display :display)) persistence-choice)
           (= choice 2) (game-mode persistence-choice display)
         )))
     (game-mode persistence-choice display)))))

@@ -16,7 +16,7 @@
       (should= 100 (square-size (init-board(->Three-by-three))))))
 
 
-(focus-it "should invoke play-game without caring what
+(it "should invoke play-game without caring what
        what the position values are"
   (let [moves (atom (range 10))
         next-move (fn [& _] (let [move (first @moves)]
@@ -33,7 +33,7 @@
     )(doseq [i (range 10)] (delete-row {:table :board})))
 
 
-  (focus-it "simulates human move on gui"
+  (it "simulates human move on gui"
     (with-redefs [q/mouse-pressed? (constantly true)
                   q/mouse-x (constantly 270)
                   q/mouse-y (constantly 50)
@@ -49,13 +49,13 @@
                   q/stroke-weight (stub :stroke-weight)
                   q/text (stub :text)
                   q/width (constantly 300)]
-      (should= nil (draw-move {:state [:x :e :o :e :e :e :e :e :e], :size 3, :display :gui}))))
+      (should= nil (draw-move {:state [:x :e :o :e :e :e :e :e :e], :size 3, :display :gui :dimension :two}))))
 
   (it "draw-grid"
     (with-redefs [q/stroke (stub :stroke)
                   q/fill (stub :fill)
-                  q/stroke-weight (stub :stroke-weight)
-                  q/width (constantly 300)])
-    (should= nil (draw-grid {:state [:x :e :o :e :e :e :e :e :e], :size 3, :dimension :two :display :gui} )))
+                  q/width (constantly 300)
+                  q/rect (stub :rect)]
+    (should= nil (draw-grid {:state [:x :e :o :e :e :e :e :e :e], :size 3, :dimension :two :display :gui}))))
 
   )

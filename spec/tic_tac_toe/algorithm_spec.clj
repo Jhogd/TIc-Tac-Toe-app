@@ -27,8 +27,10 @@
 
   (it "true or false if map contains negative value"
     (should= true (contains-neg? {1 -1 2 2 3 7}))
-    (should= false (contains-neg? {1 1 2 2 3 7}))
-    )
+    (should= false (contains-neg? {1 1 2 2 3 7})))
+
+  (it "returns a map with only the key and values of the highest number"
+    (should= {1 3 2 3} (filter-greatest-vals {1 3 2 3 4 1 5 1})))
 
 
   (it "returns key with negative value associated to it"
@@ -45,7 +47,7 @@
   (it "returns the best move for the ai to make based on the minmax function"
     (with-redefs [println (constantly nil)
                   rand-nth (constantly 0)]
-      (should= 4 (best-move (init-board (->Three-by-three)) X))))
+      (should= 0 (best-move (init-board (->Three-by-three)) X))))
 
   (it "returns true if it is human-turn"
     (should= true (human-turn? (conj (conj (init-board (->Three-by-three))

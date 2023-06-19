@@ -40,7 +40,7 @@
                     choose-persistence (constantly {:file-type :db})
                     save-board (constantly nil)
                     println (constantly nil)]
-        (should=  {:state [:e :e :e :e :e :e :e :e :e], :size 3, :dimension :two, :game-type :ai-vs-human, :age :new, :display :print}
+        (should= {:state [:e :e :e :e :e :e :e :e :e], :size 3, :dimension :two, :game-type :ai-vs-human, :age :new, :display :print, :file-type :db}
                  (game-mode  {:file-type :db} {:display :print}))
     )
     (delete-row {:table :game}))
