@@ -5,11 +5,13 @@
 
 
 (defn grab-last-game [file-name]
+  (if (= (slurp file-name) "")
+    nil
   (with-open [reader (io/reader file-name)]
     (->> (line-seq reader)
          (remove str/blank?)
          last
-         read-string)))
+         read-string))))
 
 (defn save-board [board current-player game-number level level-two file-name]
   (spit file-name (utility/->game-state board current-player game-number level level-two)
@@ -18,3 +20,6 @@
 
 (defn grab-games [file-name]
   (slurp file-name))
+
+
+(def edn-file "official-game-state.txt")

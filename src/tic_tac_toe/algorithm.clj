@@ -2,36 +2,22 @@
   (:require [tic-tac-toe.utility :refer :all])
   )
 
-(defn check-initial-moves [player sub-board]
-  (boolean (and (some #(= (switch-player player) %) sub-board) (every? #(not= player %) sub-board))))
+(defn determine-depth [board]
+  (cond
+    (= (:size board) 4) 4
+    (= (:dimension board) :three) 4
+    (and (= (:dimension board) :two) (= (:size board))) 362880
+  ))
 
-(defn first-moves [board player]
-  (let [first-row (subvec board 0 4)
-        second-row (subvec board 4 8)
-        third-row (subvec board 8 12)
-        fourth-row (subvec board 12 16)
-        first-col (mapv #(nth board %) [0 4 8 12])
-        second-col (mapv #(nth board %) [1 5 9 13])
-        third-col (mapv #(nth board %) [2 6 10 14])
-        fourth-col (mapv #(nth board %) [3 7 11 15])
-        ]
-    (cond
-      (check-initial-moves player first-row) (rand-nth [0 1 2 3])
-      (check-initial-moves player first-col) (rand-nth [0 4 8 12])
-      (check-initial-moves player second-row) (rand-nth [4 5 6 7])
-      (check-initial-moves player second-col) (rand-nth [1 5 9 13])
-      (check-initial-moves player third-row) (rand-nth [8 9 10 11])
-      (check-initial-moves player third-col) (rand-nth [2 6 10 14])
-      (check-initial-moves player fourth-row) (rand-nth [12 13 14 15])
-      (check-initial-moves player fourth-col) (rand-nth [3 7 11 15])
-      :else
-      0)))
-
+(defn new-board-minimax [board player move]
+  (if (= player X)
+    (player-move board player move)
+    (player-move board (switch-player player) move)))
 
 (declare min-value)
 
 (defn max-value [board player depth]
-  (let [depth-limit (if (= (:dimension board) :three) 4 30)]
+  (let [depth-limit (determine-depth board)]
   (if (or (terminal? board) (= depth depth-limit))
     (* (terminal-state board) (/ 1 depth))
     (loop [moves (list-empties (:state board))
@@ -41,14 +27,13 @@
         (let [move (first moves)
               new-board (player-move board player move)
               new-eval (min-value new-board (switch-player player) (inc depth))]
-          ;(prn "new-eval" new-eval)
           (recur (rest moves) (max eval new-eval))
           ))))))
 
 (def max-value (memoize max-value))
 
 (defn min-value [board player depth]
-  (let [depth-limit (if (= (:dimension board) :three) 4 30)]
+  (let [depth-limit (determine-depth board)]
   (if (or (terminal? board) (= depth depth-limit))
     (* (terminal-state board) (/ 1 depth))
     (loop [moves (list-empties (:state board))
@@ -66,24 +51,40 @@
 (defn minimax [board player]
   (loop [[move & moves] (list-empties (:state board))
          best-move -1
-         best-val (if (= player X) -1000 1000)]
+         best-val -1000
+         best-coll {best-move best-val}]
     (if move
-      (let [new-board (player-move board player move)
+      (let [new-board (new-board-minimax board player move)
             eval (min-value new-board (switch-player player) 1)]
-        (if (and (= player O) (< eval best-val))
-          (recur moves move eval)
-          (if (and (= player X) (> eval best-val))
-            (recur moves move eval)
-            (recur moves best-move best-val))))
-      [best-move best-val])))
+        (recur moves move eval (conj best-coll {move eval})))
+      best-coll)))
+
+(defn filter-greatest-vals [move-eval-map]
+  (into {} (filter #(= (val %) (apply max (vals move-eval-map))) move-eval-map)))
+
+
+(defn contains-neg? [best-map]
+  (boolean (some #(neg? (val %)) best-map)))
+
+(defn get-neg-key [best-map]
+  (some (fn [[k v]] (when (neg? v) k)) best-map))
+
+(defmulti best-first :dimension)
+
+(defmethod best-first :two [board]
+  (if (= (:size board) 3) 4 0))
+
+(defmethod best-first :three [board]
+  13)
 
 (defn best-move [board player]
-  (if (and (= (:size board) 4) (> (count (list-empties (:state board))) 12))
-    (loop [initial-move (first-moves (:state board) player)]
-      (if (is-empty? (:state board) initial-move)
-        initial-move
-        (recur (first-moves (:state board) player))))
-    (first (minimax board player))))
+  (let [best-moves-map (dissoc (minimax board player) -1)]
+    (cond
+      (and (contains-neg? best-moves-map) (= player O)) (get-neg-key best-moves-map)
+      (all-empty-space? (:state board)) (best-first board)
+      :else
+      (rand-nth (keys (filter-greatest-vals best-moves-map)))
+      )))
 
 (defn level-decision? [standard]
   (let [random (rand)]
@@ -105,4 +106,40 @@
     (rand-nth (list-empties (:state board)))
     (best-move board player)))
 
+(defn difficulty [level]
+  (cond
+    (= level 1) {:level :easy}
+    (= level 2) {:level :medium}
+    (= level 3) {:level :unbeatable}
+    ))
 
+(defmulti ai-turn (fn [x & args] (:display x)))
+
+(defmethod ai-turn :print [board level player]
+  (let [move (ai-standard (difficulty level) board player)]
+    (println (str "AI " player " has chose move:" move))
+    (player-move board player move)))
+
+(defmethod ai-turn :gui [board level player]
+  (let [move (ai-standard (difficulty level) board player)]
+    (player-move board player move)))
+
+(defn human-turn? [board current-player player]
+  (or (and (= (:game-type board) :ai-vs-human) (= current-player player))
+      (= (:game-type board) :human-vs-human)))
+
+
+(defmulti process-game-board (fn [x & args] (:game-type x)))
+
+(defmethod process-game-board :ai-vs-human [game-board current-player player difficulty difficulty2]
+(if (= current-player player)
+  (human-turn game-board current-player)
+  (ai-turn game-board difficulty current-player)))
+
+(defmethod process-game-board :ai-vs-ai [game-board current-player player difficulty difficulty2]
+  (if (= current-player player)
+    (ai-turn game-board difficulty current-player)
+    (ai-turn game-board difficulty2 current-player)))
+
+(defmethod process-game-board :human-vs-human [game-board current-player player difficulty difficulty1]
+  (human-turn game-board current-player))

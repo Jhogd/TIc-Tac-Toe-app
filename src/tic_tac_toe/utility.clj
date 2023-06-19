@@ -1,15 +1,19 @@
 (ns tic-tac-toe.utility
-(:require [clojure.string :as str]))
+  (:require [clojure.string :as str]
+            [quil.core :as q :include-macros true]
+            [quil.middleware :as m]))
 
 
 (def X :x)
 (def O :o)
 (def EMPTY :e)
 
+(def color {:cyan [0 204 204] :pink [255 153 204] :black [0 0 0]})
+
 (def game-state {:board nil :player nil :game-number 0 :difficulty nil :difficulty2 nil})
 
 (defn ->game-state [board current-player game-number level level-two]
-   (assoc game-state :board board :player current-player :game-number game-number :difficulty level :difficulty2 level-two))
+  (assoc game-state :board board :player current-player :game-number game-number :difficulty level :difficulty2 level-two))
 
 (defprotocol Board
   (init-board [this])
@@ -32,15 +36,17 @@
   (init-board [this] {:state (vec (repeat (* 3 3 3) EMPTY)) :size 3 :dimension :three})
   )
 
-
 (defn has-empty-space? [board]
   (boolean (some #(= EMPTY %) board)))
+
+(defn all-empty-space? [board]
+  (boolean (not (some #(= X %) board))))
 
 (defn is-empty? [board position]
   (= (nth board position) EMPTY))
 
 (defn player-move [board player position]
-  (update board :state  #(assoc % position player)))
+  (update board :state #(assoc % position player)))
 
 (defn switch-player [current-player]
   (if (= current-player X) O X))
@@ -72,8 +78,6 @@
         win-cond (fn [space] (every? #(= player %) space))]
     (boolean (some win-cond all-spaces))))
 
-
-
 (defn list-empties [board]
   (vec (keep-indexed (fn [index value]
                        (when (= value EMPTY) index)) board)))
@@ -88,16 +92,49 @@
 (defn terminal? [board]
   (or (win? board X) (win? board O) (not (has-empty-space? (:state board)))))
 
+(defmulti game-over (fn [x & args] (:display x)))
+
+(defmethod game-over :print [board player game-number difficulty difficulty2]
+  (cond
+    (= (terminal-state board) 10) (println "Player X has won the game")
+    (= (terminal-state board) -10) (println "Player O has won the game")
+    (= (terminal-state board) 1) (println "The game has ended in draw")
+    ))
+
+(defmethod game-over :gui [board current-player player game-number difficulty difficulty2]
+  {:board board :current-player current-player :player player :game-number game-number
+   :difficulty difficulty :difficulty2 difficulty2})
+
+
+(defn human-turn [board player]
+  (println (str "Its player " player "'s turn please enter a valid move:"))
+  (let [move (read)]
+    (if (is-empty? (:state board) move)
+      (player-move board player move)
+      (do
+        (println "Invalid move please try again:")
+        (player-move board player (read))))))
+
+
+(defn get-player [board pos]
+  (nth (:state board) pos))
+
+(defn player-to-color [player]
+  (cond
+    (= player :x) (:black color)
+    (= player :o) (:pink color)
+    :else
+    nil))
 
 (defmulti print-board :dimension)
 
 (defmethod print-board :two [board]
-    (doseq [row (partition (:size board) (:state board))]
-      (println (str/join " | " row))))
+  (doseq [row (partition (:size board) (:state board))]
+    (println (str/join " | " row))))
 
 (defmethod print-board :three [board]
   (doseq [layer (partition 9 (:state board))]
     (doseq [row (partition (:size board) layer)]
       (println (str/join " | " row)))
-      (println (str/join "---" (repeat (:size board) "+")))
+    (println (str/join "---" (repeat (:size board) "+")))
     (println)))

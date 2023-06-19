@@ -19,6 +19,21 @@
     (with-redefs [rand (constantly 0.5)]
       (should= true (level-decision? 0.8))))
 
+  (it "returns a deviation depending on what difficulty it is"
+     (should= {:level :easy} (difficulty 1))
+     (should= {:level :medium} (difficulty 2))
+     (should= {:level :unbeatable} (difficulty 3))
+     )
+
+  (it "true or false if map contains negative value"
+    (should= true (contains-neg? {1 -1 2 2 3 7}))
+    (should= false (contains-neg? {1 1 2 2 3 7}))
+    )
+
+
+  (it "returns key with negative value associated to it"
+    (should= 1 (get-neg-key {1 -1 2 2 3 7})))
+
  (it "returns a move for the ai-standard to return"
     (with-redefs [rand (constantly 0.4)
                   rand-nth (constantly 0)]
@@ -26,8 +41,15 @@
       ))
 
 
+
   (it "returns the best move for the ai to make based on the minmax function"
-    (with-redefs [println (constantly nil)]
+    (with-redefs [println (constantly nil)
+                  rand-nth (constantly 0)]
       (should= 0 (best-move (init-board (->Three-by-three)) X))))
 
+  (it "returns true if it is human-turn"
+    (should= true (human-turn? (conj (conj (init-board (->Three-by-three))
+                                           {:game-type :ai-vs-human})
+                                     {:display :print})  X
+                               X )))
   )
