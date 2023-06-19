@@ -72,7 +72,7 @@
 (defmulti best-first :dimension)
 
 (defmethod best-first :two [board]
-  (if (= (:size board) 3) 4 0))
+ 0)
 
 (defmethod best-first :three [board]
   13)
