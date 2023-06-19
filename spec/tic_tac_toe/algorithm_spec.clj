@@ -45,7 +45,7 @@
   (it "returns the best move for the ai to make based on the minmax function"
     (with-redefs [println (constantly nil)
                   rand-nth (constantly 0)]
-      (should= 0 (best-move (init-board (->Three-by-three)) X))))
+      (should= 4 (best-move (init-board (->Three-by-three)) X))))
 
   (it "returns true if it is human-turn"
     (should= true (human-turn? (conj (conj (init-board (->Three-by-three))
