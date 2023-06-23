@@ -25,6 +25,18 @@
      (should= {:level :unbeatable} (difficulty 3))
      )
 
+  (it "returns the move that results in a terminal state for either player"
+    (should= 5 (best-move-win {:state [:e :e :e :x :x :e :e :e :e] :size 3 :dimension :two}
+                              X {0 1 1 3 2 3 7 1 8 1 5 3}))
+    (should= 3 (best-move-win {:state [:o :e :e :e :e :e :o :e :e] :size 3 :dimension :two}
+                              O {3 -2  7 -2 8 1 5 -2}))
+
+    (should= 1 (best-move-win {:state [:x :e :x :e :o :x :o :e :e] :size 3 :dimension :two}
+                              O {1 -2  7 -2 8 1 5 -2}))
+    (should= 1 (best-move-win {:state [:x :e :x :e :o :x :o :e :e] :size 3 :dimension :two}
+                              O {1 0N, 3 5/2, 7 -10/3, 8 0N}))
+    )
+
   (it "true or false if map contains negative value"
     (should= true (contains-neg? {1 -1 2 2 3 7}))
     (should= false (contains-neg? {1 1 2 2 3 7})))
@@ -32,6 +44,8 @@
   (it "returns a map with only the key and values of the highest number"
     (should= {1 3 2 3} (filter-greatest-vals {1 3 2 3 4 1 5 1})))
 
+  (it "returns smallest key associated with value"
+    (should= {1 1 2 1} (filter-smallest-vals {1 1 2 1 3 4 5 7})))
 
   (it "returns key with negative value associated to it"
     (should= 1 (get-neg-key {1 -1 2 2 3 7})))

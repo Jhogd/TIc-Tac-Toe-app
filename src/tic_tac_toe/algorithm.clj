@@ -14,6 +14,8 @@
     (player-move board player move)
     (player-move board (switch-player player) move)))
 
+
+
 (declare min-value)
 
 (defn max-value [board player depth]
@@ -29,6 +31,11 @@
               new-eval (min-value new-board (switch-player player) (inc depth))]
           (recur (rest moves) (max eval new-eval))
           ))))))
+
+(defn new-board-minimax [board player move]
+  (if (= player X)
+    (player-move board player move)
+    (player-move board (switch-player player) move)))
 
 (def max-value (memoize max-value))
 
@@ -51,10 +58,10 @@
 (defn minimax [board player]
   (loop [[move & moves] (list-empties (:state board))
          best-move -1
-         best-val -1000
+         best-val (if (= player X) -1000 1000)
          best-coll {best-move best-val}]
     (if move
-      (let [new-board (new-board-minimax board player move)
+      (let [new-board (player-move board player move)
             eval (min-value new-board (switch-player player) 1)]
         (recur moves move eval (conj best-coll {move eval})))
       best-coll)))
@@ -62,6 +69,8 @@
 (defn filter-greatest-vals [move-eval-map]
   (into {} (filter #(= (val %) (apply max (vals move-eval-map))) move-eval-map)))
 
+(defn filter-smallest-vals [move-eval-map]
+  (into {} (filter #(= (val %) (apply min (vals move-eval-map))) move-eval-map)))
 
 (defn contains-neg? [best-map]
   (boolean (some #(neg? (val %)) best-map)))
@@ -77,13 +86,24 @@
 (defmethod best-first :three [board]
   13)
 
+(defn great-or-least [player best-moves-map]
+  (if (= player X) (keys (filter-greatest-vals best-moves-map))
+                   (keys (filter-smallest-vals best-moves-map))))
+
+(defn best-move-win [board player best-moves-map]
+  (let [moves (keys best-moves-map)]
+    (let [check-move-win? (fn [player move]
+                            (terminal? (player-move board player move)))]
+      (first (filter #(or (check-move-win? player %) (check-move-win? (switch-player player) %)) moves)))))
+
 (defn best-move [board player]
-  (let [best-moves-map (dissoc (minimax board player) -1)]
+  (let [best-moves-map (dissoc (minimax board player) -1)
+        check-best-moves (best-move-win board player best-moves-map)]
     (cond
-      (and (contains-neg? best-moves-map) (= player O)) (get-neg-key best-moves-map)
       (all-empty-space? (:state board)) (best-first board)
-      :else
-      (rand-nth (keys (filter-greatest-vals best-moves-map)))
+      (not (nil? check-best-moves)) check-best-moves
+      (= player X) (first (keys (filter-greatest-vals best-moves-map)))
+      (= player O) (first (keys (filter-smallest-vals best-moves-map)))
       )))
 
 (defn level-decision? [standard]

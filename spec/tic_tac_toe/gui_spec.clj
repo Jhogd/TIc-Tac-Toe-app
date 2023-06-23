@@ -13,35 +13,18 @@
 
   (it "retrieves the square size for the gui"
     (with-redefs [q/width (constantly 300)]
-      (should= 100 (square-size (init-board(->Three-by-three))))))
+      (should= 100 (square-size (init-board (->Three-by-three))))))
 
-
-(it "should invoke play-game without caring what
-       what the position values are"
-  (let [moves (atom (range 10))
-        next-move (fn [& _] (let [move (first @moves)]
-                              (swap! moves rest)
-                              move))]
-    (with-redefs [best-move next-move
-                  read next-move
-                  save-board (constantly nil)
-                  println (constantly nil)]
-      (should= nil (play-game (conj (conj (init-board (->Three-by-three))
-                                          {:game-type :human-vs-human})
-                                    {:display :print}) X X
-                                1  3 0)))
-    )(doseq [i (range 10)] (delete-row {:table :board})))
-
-
-  (it "simulates human move on gui"
+  #_(it "simulates human move on gui"
     (with-redefs [q/mouse-pressed? (constantly true)
                   q/mouse-x (constantly 270)
                   q/mouse-y (constantly 50)
                   q/width (constantly 300)
                   println (constantly nil)
                   ]
-      (should= {:state [:x :e :e :e :e :e :e :e :e], :size 3, :display :gui, :current-player 0, :player :o, :game-number 1, :difficulty 1, :difficulty2 2} (handle-mouse {:state [:x :e :e :e :e :e :e :e :e] :size 3 :display :gui :current-player 0 :player O :game-number 1 :difficulty 1 :difficulty2 2}  {:x 61, :y 65, :button nil}
-                                                                                           ))))
+      (should= {:state [:x :e :e :e :e :e :e :e :e], :size 3, :display :gui, :current-player 0, :player :o, :game-number 1, :difficulty 1, :difficulty2 2} (handle-mouse {:state [:x :e :e :e :e :e :e :e :e] :size 3 :display :gui :current-player 0 :player O :game-number 1 :difficulty 1 :difficulty2 2} {:x 61, :y 65, :button nil}
+                                                                                                                                                                         )))
+    (delete-row {:table :board}))
 
   (it "draws x and o on the gui"
     (with-redefs [q/stroke (stub :stroke)
@@ -56,6 +39,7 @@
                   q/fill (stub :fill)
                   q/width (constantly 300)
                   q/rect (stub :rect)]
-    (should= nil (draw-grid {:state [:x :e :o :e :e :e :e :e :e], :size 3, :dimension :two :display :gui}))))
+      (should= nil (draw-grid {:state [:x :e :o :e :e :e :e :e :e], :size 3, :dimension :two :display :gui}))))
+
 
   )

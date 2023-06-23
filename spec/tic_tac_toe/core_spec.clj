@@ -1,11 +1,12 @@
 (ns tic-tac-toe.core-spec
   (:require [speclj.core :refer :all]
             [tic-tac-toe.core :refer :all]
-            [tic-tac-toe.utility :as utility]
             [tic-tac-toe.utility :refer :all]
             [tic-tac-toe.algorithm :refer :all]
             [tic-tac-toe.file-persistence :refer :all]
             [tic-tac-toe.database :refer :all]
+            [tic-tac-toe.gui :refer :all]
+            [tic-tac-toe.db-and-edn :refer :all]
             ))
 
 (describe "Unbeatable tic-tac-toe using minmax algorithm"
@@ -41,13 +42,72 @@
                     save-board (constantly nil)
                     println (constantly nil)]
         (should= {:state [:e :e :e :e :e :e :e :e :e], :size 3, :dimension :two, :game-type :ai-vs-human, :age :new, :display :print, :file-type :db}
-                 (game-mode  {:file-type :db} {:display :print}))
+                 (game-mode  {:file-type :db}))
     )
     (delete-row {:table :game}))
 
+  (it "should invoke play-game without caring what
+       what the position values are"
+    (let [moves (atom (range 10))
+          next-move (fn [& _] (let [move (first @moves)]
+                                (swap! moves rest)
+                                move))]
+      (with-redefs [best-move next-move
+                    read next-move
+                    save-board (constantly nil)
+                    println (constantly nil)]
+        (should= nil (play-game (conj (conj (init-board (->Three-by-three))
+                                            {:game-type :human-vs-human}) {:display :print}) X X
+                                1 3 0)))
+      ) (doseq [i (range 10)] (delete-row {:table :board})))
 
-  (it "checks if the last game read in is finished or not if it is false else true"
-      (should= true (last-game-not-finished? (utility/->game-state (init-board (->Three-by-three)) "X" 1 1 1))))
+
+  (it "run game helper that fills map with game options"
+    (with-redefs [read (constantly 1)
+                  println (constantly nil)
+                  get-game-number (constantly 1)
+                  ask-difficulty (stub :ask-difficulty)
+                  insert-game (stub :insert)
+                  save-current-board (stub :save-board)]
+      (should= (conj (conj (conj (init-board(->Three-by-three)) {:game-type :ai-vs-human :age :new}) {:display :print}) {:file-type :db})
+               (run-ai-vs-human {:file-type :db}))))
+
+  (it "run game helper that fills map with game options"
+    (with-redefs [read (constantly 1)
+                  get-game-number (constantly 1)
+                  println (constantly nil)
+                  ask-difficulty (stub :ask-difficulty)
+                  insert-game (stub :insert)
+                  save-current-board (stub :save-board)]
+      (should= (conj (conj (conj (init-board(->Three-by-three)) {:game-type :ai-vs-ai :age :new}) {:display :print}) {:file-type :db})
+               (run-ai-vs-ai {:file-type :db}))))
+
+  (it "run game helper that fills map with game options"
+    (with-redefs [read (constantly 1)
+                  get-game-number (constantly 1)
+                  println (constantly nil)
+                  ask-difficulty (stub :ask-difficulty)
+                  insert-game (stub :insert)
+                  save-current-board (stub :save-board)]
+      (should= (conj (conj (conj (init-board(->Three-by-three)) {:game-type :human-vs-human :age :new}) {:display :print}) {:file-type :db})
+               (run-human-vs-human {:file-type :db}))))
+
+  (it "determine if we resume or not"
+    (with-redefs [last-game (stub :last)
+                  game-mode (stub  :game-mode)
+                  println (constantly nil)
+                  last-game-not-finished? (stub :last-game)
+                  read (constantly 2)]
+      (should= nil (game-start-options {:file-type :db}))))
+
+  (it "runs the print game or gui game based on user text after run"
+    (with-redefs [run-game (stub :run)
+                  main-sketch (stub :gui)
+                  println (constantly nil)
+                  choose-persistence (stub :choose)
+                  game-start-options (stub :options)]
+    (should= nil (print-or-gui "print"))))
+
   )
 
 
