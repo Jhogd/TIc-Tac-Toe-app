@@ -1,14 +1,12 @@
 (ns tic-tac-toe.utility
-  (:require [clojure.string :as str]
-            [quil.core :as q :include-macros true]
-            [quil.middleware :as m]))
+  (:require [clojure.string :as str]))
 
 
 (def X :x)
 (def O :o)
 (def EMPTY :e)
 
-(def color {:cyan [0 204 204] :pink [255 153 204] :black [0 0 0]})
+(def color {:cyan [0 204 204] :pink [255 0 127] :black [0 0 0]})
 
 (def game-state {:board nil :player nil :game-number 0 :difficulty nil :difficulty2 nil})
 
@@ -69,7 +67,7 @@
         cols (for [i [[0 3 6] [1 4 7] [2 5 8] [9 12 15] [10 13 16] [11 14 17]
                       [18 21 24] [19 22 25] [20 23 26]]]
                (mapv #(get (:state board) %) i))
-        diags (for [i [[0 4 8] [2 4 6] [9 13 17] [12 13 15] [18 22 26] [20 22 24]]]
+        diags (for [i [[0 4 8] [2 4 6] [9 13 17] [11 13 15] [18 22 26] [20 22 24]]]
                 (mapv #(get (:state board) %) i))
         depth-cols (apply mapv vector (partition 9 (:state board)))
         depth-rows (for [i [[0 10 20] [3 13 23] [6 16 26]]] (mapv #(get (:state board) %) i))
@@ -94,16 +92,39 @@
 
 (defmulti game-over (fn [x & args] (:display x)))
 
-(defmethod game-over :print [board player game-number difficulty difficulty2]
+(defmethod game-over :print [board]
   (cond
     (= (terminal-state board) 10) (println "Player X has won the game")
     (= (terminal-state board) -10) (println "Player O has won the game")
-    (= (terminal-state board) 1) (println "The game has ended in draw")
+    (= (terminal-state board) 0) (println "The game has ended in draw")
     ))
 
 (defmethod game-over :gui [board current-player player game-number difficulty difficulty2]
-  {:board board :current-player current-player :player player :game-number game-number
+  {:screen :game-over :board board :current-player current-player :player player :game-number game-number
    :difficulty difficulty :difficulty2 difficulty2})
+
+
+(defn choose-player []
+  (println "Choose your character \n 1) X\n 2) O")
+  (let [choice (read)]
+    (if (= choice 1) :x :o))
+  )
+
+(defn game-player-rel [board]
+  (if (= (:game-type board) :ai-vs-human) (choose-player) X))
+
+(defn select-player [board last-state]
+  (cond
+    (= (:age board) :new) (game-player-rel board)
+    (= (:age board) :old) (:player last-state)
+    ))
+
+(defn select-current-player [board last-state]
+  (cond
+    (= (:age board) :new) X
+    (= (:age board) :old) (:player last-state)
+    ))
+
 
 
 (defn human-turn [board player]
@@ -126,6 +147,7 @@
     :else
     nil))
 
+
 (defmulti print-board :dimension)
 
 (defmethod print-board :two [board]
@@ -138,3 +160,5 @@
       (println (str/join " | " row)))
     (println (str/join "---" (repeat (:size board) "+")))
     (println)))
+
+

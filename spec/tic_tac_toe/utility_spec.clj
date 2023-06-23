@@ -48,12 +48,14 @@
     (should= false (win? {:state [:o :o :x :o :x :o :x :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :e :x :e :x :e] :size 3 :dimension :three} O))
     (should= true (win? {:state [:x :o :x :o :x :e :x :e :o :o :e :e :x :e :x :e :e :e :e :e :e :e :x :e :o :e :e] :size 3 :dimension :three} X))
     (should= false (win? {:state [:x :o :e :e :o :x :e :e :x :e :e :e :e :e :e :e :o :e :e :e :x :e :e :e :e :e :e] :size 3 :dimension :three} O))
+    (should= false (win? {:state [:e :e :e :e :o :x :e :e :e :e :e :e :x :x :e :x :o :e :e :e :x :e :e :e :e :e :e] :size 3 :dimension :three} X))
+    (should= true (win? {:state [:o :x :e :e :o :e :e :x :e :e :x :e :e :x :e :e :o :e :e :x :o :e :e :e :e :e :e], :size 3, :dimension :three} X))
     )
   (it "returns terminal states 10 -10 and 0 depending on the board"
     (should= 10 (terminal-state {:state [:x :x :x :e :o :e :e :e :e] :size 3 :dimension :two}))
     (should= -10 (terminal-state {:state [:o :o :o :e :o :e :e :e :e] :size 3 :dimension :two}))
-    (should= 1 (terminal-state {:state [:e :e :o :e :o :e :e :e :e] :size 3 :dimension :two}))
-    (should= 1 (terminal-state {:state [:o :e :o :o :e :e :e :e :e :e :e :e :e :e :e :o] :size 4 :dimension :two}))
+    (should= 0 (terminal-state {:state [:e :e :o :e :o :e :e :e :e] :size 3 :dimension :two}))
+    (should= 0 (terminal-state {:state [:o :e :o :o :e :e :e :e :e :e :e :e :e :e :e :o] :size 4 :dimension :two}))
     (should= 10 (terminal-state {:state [:x :x :x :x :e :e :e :e :e :e :e :e :e :e :e :o] :size 4 :dimension :two}))
     )
   (it "returns true or false if any of the terminal states are met or not"
@@ -66,9 +68,9 @@
     (should= true (all-empty-space? (:state (init-board(->Three-by-three))))))
 
   (it "should give a printed statement depending on who won the game"
-    (should= "Player X has won the game\n" (with-out-str (game-over (conj {:state [:x :x :x :e :o :e :e :e :e] :size 3 :dimension :two} {:display :print}) X 1 1 1)))
-    (should= "Player O has won the game\n" (with-out-str (game-over (conj {:state [:x :e :x :o :o :o :e :e :e] :size 3 :dimension :two} {:display :print}) X 1 1 1)))
-    (should= "Player O has won the game\n" (with-out-str (game-over (conj {:state [:o :o :o :o :e :e :e :e :e :e :e :e :e :e :e :o] :size 4 :dimension :two} {:display :print}) X 1 1 1)))
+    (should= "Player X has won the game\n" (with-out-str (game-over (conj {:state [:x :x :x :e :o :e :e :e :e] :size 3 :dimension :two} {:display :print}))))
+    (should= "Player O has won the game\n" (with-out-str (game-over (conj {:state [:x :e :x :o :o :o :e :e :e] :size 3 :dimension :two} {:display :print}))))
+    (should= "Player O has won the game\n" (with-out-str (game-over (conj {:state [:o :o :o :o :e :e :e :e :e :e :e :e :e :e :e :o] :size 4 :dimension :two} {:display :print}))))
     )
 
   (it "gives me an error that the spot is filled then make me re choose"
