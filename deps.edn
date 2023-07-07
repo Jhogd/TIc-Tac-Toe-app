@@ -1,0 +1,20 @@
+{
+ :paths ["src"]
+ :deps {
+        org.clojure/clojure {:mvn/version "1.11.1"}
+        org.clojure/java.jdbc {:mvn/version "0.7.12"}
+        org.xerial/sqlite-jdbc {:mvn/version "3.42.0.0"}
+        quil/quil {:mvn/version "4.0.0-SNAPSHOT-1"}
+
+        }
+
+ :aliases {
+           :test {:extra-deps  {
+                                speclj/speclj {:mvn/version "3.4.3"}
+                                }
+                  :extra-paths ["spec/"]}
+           :spec {:main-opts ["-m" "speclj.main" "-c"]}
+
+           }
+
+ }
