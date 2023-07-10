@@ -17,6 +17,9 @@
     (should= true (enough-moves-win? [:x :x :x :e :o :e :o :e :e]))
     (should= true (enough-moves-win? [:x :x :x :x :e :e :o :e :o :e :x :e :e :e :x :o])))
 
+  (it "returns the map the player wants to use"
+    (with-redefs [read (constantly 3)]
+    (should= (init-board (->Three-dimension)) (get-board))))
 
   (it "should switch from player X to player O and vice versa"
     (should= O (switch-player X)))

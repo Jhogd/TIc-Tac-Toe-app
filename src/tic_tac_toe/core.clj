@@ -16,16 +16,15 @@
   (read))
 
 
+(def board-choice {1 (init-board (->Three-by-three))
+                   2 (init-board (->Four-by-four))
+                   3 (init-board (->Three-dimension))})
+
 (defn get-board []
   (println "Select a board\n 1) 3\n 2) 4\n 3) 3D")
   (let [choice (read)]
-    (cond
-      (= choice 1) (init-board (->Three-by-three))
-      (= choice 2) (init-board (->Four-by-four))
-      (= choice 3) (init-board (->Three-dimension))
-      :else
-      nil))
-  )
+    (get board-choice choice)
+  ))
 
 
 (defn choose-persistence []
