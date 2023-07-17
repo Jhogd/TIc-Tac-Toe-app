@@ -11,10 +11,12 @@
   (it "checks if the last game read in is finished or not if it is false else true"
     (should= true (last-game-not-finished? (utility/->game-state (init-board (->Three-by-three)) "X" 1 1 1))))
 
-  (it "returns last game number or 0 if null"
+  (focus-it "returns last game number or 0 if null"
     (insert-game 100000 1 2)
     (should= 100000 (get-game-number {:file-type :db}))
-    (delete-row {:table :game}))
+    (delete-row {:table :game})
+    (delete-row {:table :game})
+    )
 
   (it "decides to increase game number or not depending on age"
     (insert-game 100000 1 2)

@@ -86,10 +86,6 @@
 (defmethod best-first :three [board]
   13)
 
-(defn great-or-least [player best-moves-map]
-  (if (= player X) (keys (filter-greatest-vals best-moves-map))
-                   (keys (filter-smallest-vals best-moves-map))))
-
 (defn best-move-win [board player best-moves-map]
   (let [moves (keys best-moves-map)]
     (let [check-move-win? (fn [player move]

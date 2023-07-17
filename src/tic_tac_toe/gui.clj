@@ -46,7 +46,6 @@
     (+ x (* (:size board) y) (* (:size board) (:size board) layer))))
 
 (defn handle-end-state [board player current-player game-number difficulty difficulty2]
-  (prn "board" board)
     (save-current-board board current-player game-number difficulty difficulty2)
     (game-over board current-player player game-number difficulty difficulty2))
 
@@ -104,9 +103,11 @@
           player (get-player board (+ x (* y (:size board))))
           color (player-to-color player)]
       (q/stroke 0)
-      (q/stroke-weight 2)
+     (q/stroke-weight 2)
       (q/fill color)
-      (place-player-gui-two x y square half-size player))))
+      (place-player-gui-two x y square half-size player)
+   ))
+  )
 
 (defn place-player-gui-three [x y square half-size shift-x player]
   (cond
@@ -116,20 +117,20 @@
     nil))
 
 (defmethod draw-move :three [board]
-  (let [square (square-size board)
-        shift (* square (:size board))
-        half-size (/ square 2)]
-    (doseq [layer (range 0 3)
-            x (range 0 (:size board))
-            y (range 0 (:size board))]
-      (let [shift-x (* shift layer)
-            player (get-player board (+ x (* y (:size board)) (* layer (* (:size board) (:size board)))))
-            color (player-to-color player)]
-        (q/stroke 0)
-        (q/stroke-weight 2)
-        (q/fill color)
-        (place-player-gui-three x y square half-size shift-x player)
-        ))))
+ (let [square (square-size board)
+       shift (* square (:size board))
+       half-size (/ square 2)]
+   (doseq [layer (range 0 3)
+           x (range 0 (:size board))
+           y (range 0 (:size board))]
+     (let [shift-x (* shift layer)
+           player (get-player board (+ x (* y (:size board)) (* layer (* (:size board) (:size board)))))
+           color (player-to-color player)]
+       (q/stroke 0)
+       (q/stroke-weight 2)
+       (q/fill color)
+       (place-player-gui-three x y square half-size shift-x player)
+       ))))
 
 
 (defmethod draw :game [game-map]
@@ -163,4 +164,11 @@
     :update update-gui
     ))
 
+
+(defmethod handle-mouse :game-over [game-map coord]
+  (cond
+    (button-selected? (:x coord) (:y coord) 250 0) (do (q/exit) (main-sketch) game-map)
+    (button-selected? (:x coord) (:y coord) 250 100) (do (q/exit) game-map)
+    :else
+    game-map))
 

@@ -38,5 +38,15 @@
     (delete-row {:table :game})
     (delete-row {:table :board}))
 
- )
+  (focus-it "grabs the board, player, levels from a given gamenumber"
+    (insert-game 2000 1 1)
+    (insert-board (init-board (->Three-by-three)) ":x" 2000)
+    (should= {:board {:state [:e :e :e :e :e :e :e :e :e], :size 3, :dimension :two}, :player :x, :game-number 2000, :difficulty 1, :difficulty2 1}
+             (current-game-pieces 2000))
+    (delete-row {:table :game})
+    (delete-row {:table :board})
+    (delete-row {:table :board})
+    )
+
+  )
 

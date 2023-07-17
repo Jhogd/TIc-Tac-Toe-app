@@ -57,3 +57,15 @@
         difficulty1 (:difficulty1 (first game-difficulty1-2))
         difficulty2 (:difficulty2 (first game-difficulty1-2))]
     (->game-state (if (nil? board) board (read-string board)) (if (nil? player) player (read-string player)) game-number difficulty1 difficulty2)))
+
+(defn current-game-pieces [gameId]
+  (let [board-player (jdbc/query create-connection
+                                 ["select state, player from board where game_id = ?" gameId])
+        game-difficulty1-2 (jdbc/query create-connection
+                                       ["select gamenumber, difficulty1, difficulty2 from game where gamenumber = ?"  gameId])
+        board (:state (first board-player))
+        player (:player (first board-player))
+        game-number (:gamenumber (first game-difficulty1-2))
+        difficulty1 (:difficulty1 (first game-difficulty1-2))
+        difficulty2 (:difficulty2 (first game-difficulty1-2))]
+    (->game-state (if (nil? board) board (read-string board)) (if (nil? player) player (read-string player)) game-number difficulty1 difficulty2)))
