@@ -17,6 +17,17 @@
     (should= true (enough-moves-win? [:x :x :x :e :o :e :o :e :e]))
     (should= true (enough-moves-win? [:x :x :x :x :e :e :o :e :o :e :x :e :e :e :x :o])))
 
+  (focus-it "returns a game-mode given a number"
+    (should= :ai-vs-human (get game-mode-choice 1))
+    (should= :human-vs-human (get game-mode-choice 2))
+    (should= :ai-vs-ai (get game-mode-choice 3))
+    )
+
+  (focus-it "returns a player given a number"
+    (should= :x (get player-to-number 1))
+    (should= :o (get player-to-number 2))
+    )
+
   (it "returns the map the player wants to use"
     (with-redefs [read (constantly 3)]
     (should= (init-board (->Three-dimension)) (get-board))))

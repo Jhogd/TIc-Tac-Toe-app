@@ -26,6 +26,10 @@
     (get board-choice choice)
   ))
 
+(def game-mode-choice {1 :ai-vs-human 2 :human-vs-human 3 :ai-vs-ai})
+
+(def player-to-number {1 :x 2 :o})
+
 
 (defn choose-persistence []
   (println "Please choose to run off the edn file or database\n 1) edn file\n 2) database")
