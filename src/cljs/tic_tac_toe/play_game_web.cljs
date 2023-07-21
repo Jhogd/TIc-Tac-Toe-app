@@ -72,16 +72,16 @@
        [:br]
        [:br]
        [:label "easy"]
-       (input-field "mode" 1 #(update-map ai-keyword 1))
+       (input-field "diff" 1 #(update-map ai-keyword 1))
        [:br]
        [:label "medium"]
-       (input-field "mode" 2 #(update-map ai-keyword 2))
+       (input-field "diff" 2 #(update-map ai-keyword 2))
        [:br]
        [:label "unbeatable"]
-       (input-field "mode" 3 #(update-map ai-keyword 3))
+       (input-field "diff" 3 #(update-map ai-keyword 3))
        [:br]
        [:label "NA"]
-       (input-field "mode" 0 #(update-map ai-keyword 0))]])
+       (input-field "diff" 0 #(update-map ai-keyword 0))]])
 
 
 (defn select-player-menu []
@@ -89,13 +89,13 @@
        [:br]
        [:br]
        [:label "X"]
-       (input-field "mode" :x #(update-board :user-player :x))
+       (input-field "player" :x #(update-board :user-player :x))
        [:br]
        [:label "O"]
-       (input-field "mode" :o #(update-board :user-player :o))
+       (input-field "player" :o #(update-board :user-player :o))
        [:br]
        [:label "NA"]
-       (input-field "mode" :x #(update-board :user-player :x))]]
+       (input-field "player" :x #(update-board :user-player :x))]]
   )
 
 (defmulti create-square :human-turn?)
