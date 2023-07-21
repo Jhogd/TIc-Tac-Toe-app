@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Leiningen: speclj:3.4.3">
+  <library name="Deps: speclj:3.4.3">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/speclj/speclj/3.4.3/speclj-3.4.3.jar!/" />
     </CLASSES>

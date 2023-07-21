@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Leiningen: trptcolin/versioneer:0.1.1">
+  <library name="Deps: trptcolin/versioneer:0.1.1">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/trptcolin/versioneer/0.1.1/versioneer-0.1.1.jar!/" />
     </CLASSES>

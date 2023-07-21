@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Deps: com.cleancoders.c3kit/apron:1.0.2">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/cleancoders/c3kit/apron/1.0.2/apron-1.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
