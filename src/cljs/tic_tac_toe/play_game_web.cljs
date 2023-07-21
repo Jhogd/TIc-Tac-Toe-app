@@ -67,21 +67,21 @@
        [:label "Computer vs Computer"]
        (input-field "mode" :ai-vs-ai #(update-board :game-type :ai-vs-ai))]])
 
-(defn select-difficulty [ai-number ai-keyword]
+(defn select-difficulty [ai-number ai-keyword name]
   [:p [:strong (str "Select a difficulty for: " ai-number)
        [:br]
        [:br]
        [:label "easy"]
-       (input-field "diff" 1 #(update-map ai-keyword 1))
+       (input-field name 1 #(update-map ai-keyword 1))
        [:br]
        [:label "medium"]
-       (input-field "diff" 2 #(update-map ai-keyword 2))
+       (input-field name 2 #(update-map ai-keyword 2))
        [:br]
        [:label "unbeatable"]
-       (input-field "diff" 3 #(update-map ai-keyword 3))
+       (input-field name 3 #(update-map ai-keyword 3))
        [:br]
        [:label "NA"]
-       (input-field "diff" 0 #(update-map ai-keyword 0))]])
+       (input-field name 0 #(update-map ai-keyword 0))]])
 
 
 (defn select-player-menu []
@@ -159,8 +159,8 @@
   [:div
    (select-board-menu)
    (select-game-mode)
-   (select-difficulty "Ai 1" :difficulty)
-   (select-difficulty "Ai 2" :difficulty2)
+   (select-difficulty "Ai 1" :difficulty "diff1")
+   (select-difficulty "Ai 2" :difficulty2 "diff2")
    (select-player-menu)
    [:button {:on-click #(start-game)} "Start Game"]])
 
