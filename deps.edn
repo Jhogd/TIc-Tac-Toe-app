@@ -1,20 +1,22 @@
 {
- :paths ["src"]
- :deps {
-        org.clojure/clojure {:mvn/version "1.11.1"}
-        org.clojure/java.jdbc {:mvn/version "0.7.12"}
-        org.xerial/sqlite-jdbc {:mvn/version "3.42.0.0"}
-        quil/quil {:mvn/version "4.0.0-SNAPSHOT-1"}
-
-        }
-
- :aliases {
-           :test {:extra-deps  {
-                                speclj/speclj {:mvn/version "3.4.3"}
-                                }
-                  :extra-paths ["spec/"]}
-           :spec {:main-opts ["-m" "speclj.main" "-c"]}
-
+ :paths   ["src/clj" "src/cljc" "src/cljs" "resources"]
+ :deps    {
+           org.clojure/clojure {:mvn/version "1.12.0-alpha1"}
+           org.clojure/clojurescript {:mvn/version "1.10.764"}
+           org.clojure/java.jdbc {:mvn/version "0.7.12"}
+           org.xerial/sqlite-jdbc {:mvn/version "3.42.0.0"}
+           quil/quil {:mvn/version "4.0.0-SNAPSHOT-1"}
+           cljsjs/react {:mvn/version "17.0.2-0"}
+           cljsjs/react-dom {:mvn/version "17.0.2-0"}
+           reagent/reagent {:mvn/version "1.1.0"}
+           com.cleancoders.c3kit/apron {:mvn/version "1.0.2"}
+           speclj/speclj {:mvn/version "3.4.3"}
            }
-
+ :aliases {
+           :test  {:extra-paths ["spec/clj" "spec/cljc" "spec/cljs"]}
+           :start {:main-opts ["-m" "tic-tac-toe.core"]}
+           :start-gui {:main-opts ["-m" "tic-tac-toe.core" "gui"]}
+           :spec  {:main-opts ["-m" "speclj.main" "-c"]}
+           :cljs  {:main-opts ["-m" "runner.cljs"]}
+           }
  }
