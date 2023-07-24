@@ -11,30 +11,7 @@
                :specs          true
                :verbose        false
                }
- :production  {
-               :cache-analysis false
-               ;:externs        ["dev/app/externs/gapi.js"]
-               :infer-externs  true
-               :optimizations  :advanced
-               :output-dir     "resources/public/cljs/"
-               :output-to      "resources/public/cljs/app.js"
-               :pretty-print   false
-               :sources        ["src/cljs"]
-               :specs          false
-               :verbose        false
-               }
- :staging     {
-               :cache-analysis false
-               :infer-externs  true
-               :optimizations  :whitespace
-               :output-dir     "resources/public/cljs/"
-               :output-to      "resources/public/cljs/app.js"
-               :pretty-print   true
-               :pseudo-names   true
-               :sources        ["src/cljs"]
-               :specs          false
-               :verbose        false
-               }
+
  }
 
 #_{:run-cmd     "phantomjs resources/public/specs/speclj.js"
@@ -49,29 +26,5 @@
                :verbose        false
                ;:main           "sample-project.core"
                :watch-fn       runner.cljs/on-dev-compiled
-               }
- :production  {
-               :cache-analysis false
-               ;:externs        ["dev/app/externs/gapi.js"]
-               :infer-externs  true
-               :optimizations  :advanced
-               :output-dir     "resources/public/cljs/"
-               :output-to      "resources/public/cljs/app.js"
-               :pretty-print   false
-               :sources        ["src/cljs"]
-               :specs          false
-               :verbose        false
-               }
- :staging     {
-               :cache-analysis false
-               :infer-externs  true
-               :optimizations  :whitespace
-               :output-dir     "resources/public/cljs/"
-               :output-to      "resources/public/cljs/app.js"
-               :pretty-print   true
-               :pseudo-names   true
-               :sources        ["src/cljs"]
-               :specs          false
-               :verbose        false
                }
  }
