@@ -57,47 +57,41 @@
                     #(update-map game-map :board (conj (utility/init-board (utility/->Four-by-four)) {:display :gui})))
        ]])
 
+(defn menu-label [label]
+  [:br]
+  [:label label])
+
 (defn select-game-mode []
   [:p [:strong "Select a Game type: "
        [:br]
-       [:br]
-       [:label "Player vs Computer"]
+       (menu-label "Player vs Computer")
        (input-field "mode" :ai-vs-human #(update-board game-map :game-type :ai-vs-human))
-       [:br]
-       [:label "Player vs Player"]
+       (menu-label "Player vs Player")
        (input-field "mode" :human-vs-human #(update-board game-map :game-type :human-vs-human))
-       [:br]
-       [:label "Computer vs Computer"]
+       (menu-label "Computer vs Computer")
        (input-field "mode" :ai-vs-ai #(update-board game-map :game-type :ai-vs-ai))]])
 
 (defn select-difficulty [ai-number ai-keyword name]
   [:p [:strong (str "Select a difficulty for: " ai-number)
        [:br]
-       [:br]
-       [:label "easy"]
+       (menu-label "easy")
        (input-field name 1 #(update-map game-map ai-keyword 1))
-       [:br]
-       [:label "medium"]
+       (menu-label "medium")
        (input-field name 2 #(update-map game-map ai-keyword 2))
-       [:br]
-       [:label "unbeatable"]
+       (menu-label "unbeatable")
        (input-field name 3 #(update-map game-map ai-keyword 3))
-       [:br]
-       [:label "NA"]
+       (menu-label "NA")
        (input-field name 0 #(update-map game-map ai-keyword 0))]])
 
 
 (defn select-player-menu []
   [:p [:strong "Select a player: "
        [:br]
-       [:br]
-       [:label "X"]
+       (menu-label "X")
        (input-field "player" :x #(update-board game-map :user-player :x))
-       [:br]
-       [:label "O"]
+       (menu-label "O")
        (input-field "player" :o #(update-board game-map :user-player :o))
-       [:br]
-       [:label "NA"]
+       (menu-label "NA")
        (input-field "player" :x #(update-board game-map :user-player :x))]]
   )
 
@@ -143,21 +137,32 @@
   [:button {:style {:color "blue"}
             :on-click #(restart-game)} "restart"])
 
+(defn generate-winner? [board]
+  (if (utility/terminal? board)
+    [:h2 (get terminal-to-winner (utility/terminal-state board))]))
+
+(def board-style {:style {:display "flex" :justify-content "center"
+                          :align-items "center"
+                          :height "100vh"
+                          }})
+
+(defn update-human-turn []
+  (update-map game-map :human-turn? (alg/human-turn? (:board @game-map) (:player @game-map)
+                                                     (:user-player (:board @game-map)))))
+
+(defn board-table [size]
+  [:table
+   (for [row (range  size)]
+     (create-row (:board @game-map) row))])
+
 (defn create-game-board []
   (let [board (:board @game-map)
         size (:size board)]
-    (update-map game-map :human-turn? (alg/human-turn? (:board @game-map) (:player @game-map)
-                                              (:user-player (:board @game-map))))
-    [:div{:style {:display "flex" :justify-content "center"
-                  :align-items "center"
-                  :height "100vh"
-                  }}
-     [:table
-      (for [row (range  size)]
-        (create-row (:board @game-map) row))]
+    (update-human-turn)
+    [:div board-style
+     (board-table size)
      (restart-button)
-     (if (utility/terminal? board)
-       [:h2 (get terminal-to-winner (utility/terminal-state board))])]))
+     (generate-winner? board)]))
 
 (defn start-game []
   (update-map game-map :playing? true)
