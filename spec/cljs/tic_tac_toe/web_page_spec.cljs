@@ -143,6 +143,21 @@
                  (should-have-invoked :map {:times 1})
                  ))
 
+  (it "creates board"
+    (with-redefs [play/update-map (stub :update)
+                  alg/human-turn? (stub :turn?)
+                 play/restart-button (stub :restart)
+                  utility/terminal-state (stub :terminal)
+                  utility/win? (constantly true)]
+                 (play/create-game-board)
+                 (should-have-invoked :update {:times 1})
+                 (should-have-invoked :turn? {:times 1})
+                 (should-have-invoked :restart {:times 1})
+                 (should-have-invoked :terminal {:times 1})
+                 (should= "[:div {:style {:display \"flex\", :justify-content \"center\", :align-items \"center\", :height \"100vh\"}} [:table ()] nil [:h2 nil]]"
+                          (str (play/create-game-board)))
+                 ))
+
   (it "renders entire menu"
     (with-redefs [play/select-board-menu (stub :board)
                   play/select-game-mode (stub :game-mode)

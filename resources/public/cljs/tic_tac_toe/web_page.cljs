@@ -5,6 +5,6 @@
             [tic-tac-toe.play-game-web :as play-game]))
 
 (defn ^:export main []
-  (rdom/render [play-game/main] (js/document.getElementById "app")))
+  (rdom/render [play-game/run-ttt] (js/document.getElementById "app")))
 
 (main)
