@@ -103,29 +103,27 @@
 
 (defmulti create-square :human-turn?)
 
+
+(defn square-button [position on-click-function]
+  [:button {:id  position :style {:color "blue"
+                                  :font-size "30px"
+                                  :display "inline-block"
+                                  :background-color "black"
+                                  :padding "50px 50px"}
+            :on-click on-click-function}
+   (key-to-string (nth (:state (:board @game-map)) position))])
+
 (defmethod create-square true [current-game-map position]
-    (doall
     [:td
-     [:button {:id  position :style  {:color "blue"
-                                      :font-size "30px"
-                                      :display "inline-block"
-                                      :background-color "black"
-                                      :padding "50px 50px"}
-               :on-click #(update-game-state (play-human-turn (:board current-game-map) (:player current-game-map)
-                                                              position))}
-      (key-to-string (nth (:state (:board @game-map)) position))]]))
+     (square-button position #(update-game-state (play-human-turn (:board current-game-map) (:player current-game-map)
+                                                                  position)))])
+
 
 (defmethod create-square false [current-game-map position]
       [:td
-       [:button {:id  position :style {:color "blue"
-                                       :font-size "30px"
-                                       :display "inline-block"
-                                       :background-color "black"
-                                       :padding "50px 50px"}
-                 :on-click #(update-game-state (play-ai-turn (:board current-game-map) (:player current-game-map)
-                                                                   (:user-player (:board current-game-map)) (:difficulty current-game-map)
-                                                                   (:difficulty2 current-game-map)))}
-        (key-to-string (nth (:state (:board @game-map)) position))]])
+       (square-button position #(update-game-state (play-ai-turn (:board current-game-map) (:player current-game-map)
+                                                                 (:user-player (:board current-game-map)) (:difficulty current-game-map)
+                                                                 (:difficulty2 current-game-map))))])
 
 (defn create-row [board row-number]
   (let [size (:size board)]
@@ -139,7 +137,7 @@
 
 (defn restart-game []
     (update-state-only (return-beginning-board (:state (:board @game-map))))
-    (update-map game-map :player (:user-player (:board @game-map))))
+    (update-map game-map :player :x))
 
 (defn restart-button []
   [:button {:style {:color "blue"}

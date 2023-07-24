@@ -1,31 +1,31 @@
 ;Production
-{:run-cmd     "phantomjs resources/public/specs/speclj.js"
- :development {
-               :cache-analysis false
-               ;:externs        ["dev/app/externs/gapi.js"]
-               :infer-externs  true
-               :optimizations  :advanced
-               :output-dir     "resources/public/cljs/"
-               :output-to      "resources/public/cljs/app.js"
-               :pretty-print   false
-               :sources        ["src/cljs"]
-               :specs          false
-               :verbose        false
-               }
+;{:run-cmd     "phantomjs resources/public/specs/speclj.js"
+; :development {
+;               :cache-analysis false
+;               ;:externs        ["dev/app/externs/gapi.js"]
+;               :infer-externs  true
+;               :optimizations  :advanced
+;               :output-dir     "resources/public/cljs/"
+;               :output-to      "resources/public/cljs/app.js"
+;               :pretty-print   false
+;               :sources        ["src/cljs"]
+;               :specs          false
+;               :verbose        false
+;               }
 
- }
+; }
 ;Specs
- ;{:run-cmd     "phantomjs resources/public/specs/speclj.js"
- ;:development {:cache-analysis true
- ;              :optimizations  :advanced
- ;              :output-dir     "resources/public/cljs/"
- ;              :output-to      "resources/public/cljs/app.js"
- ;              :pretty-print   true
- ;              :source-map     true
- ;              :sources        ["spec/cljs" "src/cljs"]
- ;              :specs          false
- ;              :verbose        false
- ;              ;:main           "sample-project.core"
- ;              :watch-fn       runner.cljs/on-dev-compiled
- ;              }
- ;}
+ {:run-cmd     "phantomjs resources/public/specs/speclj.js"
+ :development {:cache-analysis true
+               :optimizations  :none
+               :output-dir     "resources/public/cljs/"
+               :output-to      "resources/public/cljs/dev.js"
+               :pretty-print   true
+               :source-map     true
+               :sources        ["spec/cljs" "src/cljs"]
+               :specs          true
+               :verbose        false
+               ;:main           "sample-project.core"
+               :watch-fn       runner.cljs/on-dev-compiled
+               }
+ }
