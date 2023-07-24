@@ -9,13 +9,6 @@
     (and (= (:dimension board) :two) (= (:size board))) 362880
   ))
 
-(defn new-board-minimax [board player move]
-  (if (= player X)
-    (player-move board player move)
-    (player-move board (switch-player player) move)))
-
-
-
 (declare min-value)
 
 (defn max-value [board player depth]
@@ -33,7 +26,7 @@
           ))))))
 
 (defn new-board-minimax [board player move]
-  (if (= player X)
+  (if (= player :x)
     (player-move board player move)
     (player-move board (switch-player player) move)))
 
@@ -58,7 +51,7 @@
 (defn minimax [board player]
   (loop [[move & moves] (list-empties (:state board))
          best-move -1
-         best-val (if (= player X) -1000 1000)
+         best-val (if (= player :x) -1000 1000)
          best-coll {best-move best-val}]
     (if move
       (let [new-board (player-move board player move)
@@ -98,8 +91,8 @@
     (cond
       (all-empty-space? (:state board)) (best-first board)
       (not (nil? check-best-moves)) check-best-moves
-      (= player X) (first (keys (filter-greatest-vals best-moves-map)))
-      (= player O) (first (keys (filter-smallest-vals best-moves-map)))
+      (= player :x) (first (keys (filter-greatest-vals best-moves-map)))
+      (= player :o) (first (keys (filter-smallest-vals best-moves-map)))
       )))
 
 (defn level-decision? [standard]
@@ -133,6 +126,7 @@
 
 (defmethod ai-turn :print [board level player]
   (let [move (ai-standard (difficulty level) board player)]
+    (prn "move" move)
     (println (str "AI " player " has chose move:" move))
     (player-move board player move)))
 

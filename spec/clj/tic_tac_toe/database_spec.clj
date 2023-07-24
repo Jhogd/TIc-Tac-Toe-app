@@ -33,7 +33,7 @@
   (it "grabs the last board, player, levels"
     (insert-game 10000 1 1)
     (insert-board (init-board (->Three-by-three)) ":x" 1)
-    (should= {:board {:state [:e :e :e :e :e :e :e :e :e], :size 3, :dimension :two}, :player :x, :game-number 10000, :difficulty 1, :difficulty2 1}
+    (should=  {:board {:state [:e :e :e :e :e :e :e :e :e], :size 3, :dimension :two}, :player :x, :game-number 10000, :difficulty 1, :difficulty2 1}
              (grab-last-state))
     (delete-row {:table :game})
     (delete-row {:table :board}))
