@@ -44,22 +44,20 @@
   [:input {:type :radio :name name :value value
            :on-change update}])
 
-(defn select-board-menu []
-  [:p [:strong "Select a Board: "
-       [:br]
-       [:br]
-       [:label "3 by 3"]
-       (input-field "board" (conj (utility/init-board (utility/->Three-by-three)) {:display :gui})
-                    #(update-map game-map :board (conj (utility/init-board (utility/->Three-by-three)) {:display :gui})))
-       [:br]
-       [:label "4 by 4"]
-       (input-field "board" (conj (utility/init-board (utility/->Four-by-four)) {:display :gui})
-                    #(update-map game-map :board (conj (utility/init-board (utility/->Four-by-four)) {:display :gui})))
-       ]])
-
 (defn menu-label [label]
   [:br]
   [:label label])
+
+(defn select-board-menu []
+  [:p [:strong "Select a Board: "
+       [:br]
+       (menu-label "3 by 3")
+       (input-field "board" (conj (utility/init-board (utility/->Three-by-three)) {:display :gui})
+                    #(update-map game-map :board (conj (utility/init-board (utility/->Three-by-three)) {:display :gui})))
+       (menu-label "4 by 4")
+       (input-field "board" (conj (utility/init-board (utility/->Four-by-four)) {:display :gui})
+                    #(update-map game-map :board (conj (utility/init-board (utility/->Four-by-four)) {:display :gui})))]])
+
 
 (defn select-game-mode []
   [:p [:strong "Select a Game type: "
@@ -106,6 +104,7 @@
                                   :padding "50px 50px"}
             :on-click on-click-function}
    (key-to-string (nth (:state (:board @game-map)) position))])
+
 
 (defmethod create-square true [current-game-map position]
     [:td
